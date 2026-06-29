@@ -1,0 +1,652 @@
+<!--
+  ───────────────────────────────────────────────────────────────────────────
+  A quiet, editorial writing journal — inspired by the calm/couture vibe of
+  era.world, but with its own palette, type, and original copy.
+
+  HOW TO MAKE IT YOURS — edit the SITE object below (search for "EDIT ME").
+  Change the name, tagline, and manifesto there. Colors live in :root.
+
+  WHERE YOUR WRITING IS SAVED:
+  • Inside the Claude preview, entries save to Claude's artifact storage.
+  • When you host this file yourself (Netlify, GitHub Pages, Vercel, or just
+    opening it in a browser), entries save to your browser's localStorage.
+  • Use “Export” (bottom of the page) now and then to keep a backup file.
+  ───────────────────────────────────────────────────────────────────────────
+-->
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Journal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+  href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,300;0,6..72,400;0,6..72,500;1,6..72,300;1,6..72,400&family=IBM+Plex+Mono:wght@400;500&display=swap"
+  rel="stylesheet"
+/>
+
+<style>
+  /* ── PALETTE (edit to rebrand) ──────────────────────────────────────── */
+  :root {
+    --paper:    #F5F3EE;  /* page background — soft paper-white            */
+    --paper-2:  #EFEBE2;  /* faint inset / hover wash                      */
+    --ink:      #181712;  /* primary text — near-black, faintly warm       */
+    --ink-soft: #57534A;  /* secondary text                                */
+    --muted:    #908A7C;  /* labels, dates, captions                       */
+    --hairline: #DCD7CB;  /* fine rules                                    */
+    --accent:   #7A3B1E;  /* a single restrained accent (links/marks)      */
+
+    --serif: "Newsreader", Georgia, "Times New Roman", serif;
+    --mono:  "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+
+    --measure: 38rem;      /* reading line length */
+    --edge: clamp(1.25rem, 5vw, 4.5rem);
+  }
+
+  * { box-sizing: border-box; }
+
+  html { -webkit-text-size-adjust: 100%; }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--serif);
+    font-size: 18px;
+    line-height: 1.6;
+    font-weight: 400;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  ::selection { background: var(--ink); color: var(--paper); }
+
+  a { color: inherit; text-decoration: none; }
+
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+    border-radius: 1px;
+  }
+
+  /* ── reusable bits ──────────────────────────────────────────────────── */
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 0.66rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--muted);
+    font-weight: 500;
+  }
+
+  .wrap {
+    max-width: 60rem;
+    margin: 0 auto;
+    padding: 0 var(--edge);
+  }
+
+  .rule { height: 1px; background: var(--hairline); border: 0; margin: 0; }
+
+  /* ── top bar / masthead ─────────────────────────────────────────────── */
+  header.bar {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background: color-mix(in srgb, var(--paper) 86%, transparent);
+    backdrop-filter: saturate(120%) blur(8px);
+    -webkit-backdrop-filter: saturate(120%) blur(8px);
+    border-bottom: 1px solid var(--hairline);
+  }
+  .bar-inner {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 0.85rem var(--edge);
+  }
+  .brand {
+    font-family: var(--mono);
+    font-weight: 500;
+    font-size: 0.8rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    cursor: pointer;
+    background: none; border: 0; color: inherit; padding: 0;
+  }
+  .nav {
+    display: flex;
+    gap: 1.4rem;
+    align-items: baseline;
+  }
+  .nav button {
+    background: none; border: 0; cursor: pointer; color: var(--ink-soft);
+    font-family: var(--mono);
+    font-size: 0.7rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 0.2rem 0;
+    position: relative;
+  }
+  .nav button::after {
+    content: ""; position: absolute; left: 0; right: 100%; bottom: -2px;
+    height: 1px; background: var(--ink); transition: right .35s ease;
+  }
+  .nav button:hover { color: var(--ink); }
+  .nav button:hover::after,
+  .nav button[aria-current="true"]::after { right: 0; }
+  .nav button[aria-current="true"] { color: var(--ink); }
+
+  /* ── hero / masthead block ──────────────────────────────────────────── */
+  .hero { padding: clamp(3.5rem, 11vh, 8rem) 0 clamp(2.5rem, 6vh, 4rem); }
+  .hero .eyebrow { display: block; margin-bottom: 1.4rem; }
+  .masthead {
+    font-weight: 300;
+    font-size: clamp(2.6rem, 7vw, 5.4rem);
+    line-height: 1.02;
+    letter-spacing: -0.018em;
+    margin: 0;
+    max-width: 18ch;
+  }
+  .masthead em { font-style: italic; color: var(--accent); }
+  .manifesto {
+    margin: clamp(1.8rem, 4vh, 2.8rem) 0 0;
+    max-width: var(--measure);
+    color: var(--ink-soft);
+    font-size: 1.16rem;
+    line-height: 1.65;
+  }
+  .manifesto p { margin: 0 0 1.05em; }
+  .manifesto p:last-child { margin-bottom: 0; }
+  .hero-cta {
+    margin-top: 2.2rem;
+    display: inline-flex; align-items: center; gap: 0.6rem;
+    font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--ink);
+    background: none; border: 0; cursor: pointer; padding: 0;
+  }
+  .hero-cta .arrow { transition: transform .3s ease; }
+  .hero-cta:hover .arrow { transform: translateX(5px); }
+
+  /* ── index of entries (the “contents” signature) ────────────────────── */
+  .contents-head {
+    display: flex; align-items: baseline; justify-content: space-between;
+    padding: 1.1rem 0 0.9rem;
+  }
+  .contents-head .count { font-family: var(--mono); font-size: 0.7rem; color: var(--muted); }
+
+  .entry-row {
+    display: grid;
+    grid-template-columns: 7.5rem 1fr auto;
+    gap: 1.25rem;
+    align-items: baseline;
+    width: 100%;
+    text-align: left;
+    background: none; border: 0; cursor: pointer; color: inherit;
+    padding: 1.5rem 0.6rem;
+    border-top: 1px solid var(--hairline);
+    transition: background .25s ease, padding-left .25s ease;
+  }
+  .entry-row:hover { background: var(--paper-2); padding-left: 1.1rem; }
+  .entry-row:last-child { border-bottom: 1px solid var(--hairline); }
+  .entry-date { font-family: var(--mono); font-size: 0.72rem; color: var(--muted); letter-spacing: 0.04em; padding-top: 0.45rem; }
+  .entry-main { min-width: 0; }
+  .entry-title { font-size: 1.5rem; font-weight: 400; line-height: 1.2; letter-spacing: -0.01em; }
+  .entry-excerpt {
+    color: var(--ink-soft); font-size: 1rem; margin-top: 0.4rem;
+    display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .entry-go { font-family: var(--mono); font-size: 1.1rem; color: var(--muted); opacity: 0; transition: opacity .25s ease; padding-top: 0.3rem; }
+  .entry-row:hover .entry-go { opacity: 1; }
+
+  .empty {
+    border: 1px dashed var(--hairline);
+    border-radius: 2px;
+    padding: clamp(2rem, 6vw, 3.5rem);
+    text-align: center;
+    color: var(--ink-soft);
+    margin-top: 0.5rem;
+  }
+  .empty h3 { font-weight: 400; font-size: 1.4rem; margin: 0 0 0.5rem; color: var(--ink); }
+
+  /* ── reader ─────────────────────────────────────────────────────────── */
+  .reader { padding: clamp(3rem, 8vh, 6rem) 0 4rem; }
+  .reader-inner { max-width: var(--measure); margin: 0 auto; }
+  .back {
+    font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.14em;
+    text-transform: uppercase; color: var(--muted);
+    background: none; border: 0; cursor: pointer; padding: 0; margin-bottom: 2.4rem;
+    display: inline-flex; gap: 0.5rem; align-items: center;
+  }
+  .back:hover { color: var(--ink); }
+  .reader-date { font-family: var(--mono); font-size: 0.74rem; color: var(--muted); letter-spacing: 0.04em; }
+  .reader-title {
+    font-weight: 300; font-size: clamp(2rem, 5.5vw, 3.2rem);
+    line-height: 1.08; letter-spacing: -0.018em; margin: 0.9rem 0 2.2rem;
+  }
+  .prose { font-size: 1.2rem; line-height: 1.75; }
+  .prose p { margin: 0 0 1.35em; }
+  .prose em { font-style: italic; }
+  .prose strong { font-weight: 500; }
+  .reader-tools { margin-top: 3rem; padding-top: 1.4rem; border-top: 1px solid var(--hairline); display: flex; gap: 1.6rem; }
+  .reader-tools button {
+    font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase;
+    background: none; border: 0; cursor: pointer; color: var(--muted); padding: 0;
+  }
+  .reader-tools button:hover { color: var(--ink); }
+  .reader-tools .danger:hover { color: var(--accent); }
+
+  /* ── composer (the “disappearing” writing surface) ──────────────────── */
+  .compose { padding: clamp(2.5rem, 7vh, 5rem) 0 4rem; }
+  .compose-inner { max-width: var(--measure); margin: 0 auto; }
+  .compose .eyebrow { display:block; margin-bottom: 1.6rem; }
+  .field-title, .field-body {
+    width: 100%; background: transparent; border: 0; color: var(--ink);
+    font-family: var(--serif); resize: none; padding: 0;
+  }
+  .field-title {
+    font-weight: 300; font-size: clamp(1.9rem, 5vw, 3rem); line-height: 1.1;
+    letter-spacing: -0.018em; margin-bottom: 1.4rem;
+  }
+  .field-title::placeholder { color: color-mix(in srgb, var(--muted) 70%, transparent); }
+  .field-body {
+    font-size: 1.2rem; line-height: 1.75; min-height: 46vh;
+  }
+  .field-body::placeholder { color: color-mix(in srgb, var(--muted) 70%, transparent); }
+  .field-title:focus, .field-body:focus { outline: none; }
+  .compose-bar {
+    position: sticky; bottom: 0; margin-top: 1.5rem; padding: 1rem 0;
+    background: linear-gradient(to top, var(--paper) 60%, transparent);
+    display: flex; align-items: center; gap: 1rem;
+  }
+  .btn {
+    font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase;
+    border: 1px solid var(--ink); background: var(--ink); color: var(--paper);
+    padding: 0.7rem 1.3rem; cursor: pointer; border-radius: 1px; transition: opacity .2s ease;
+  }
+  .btn:hover { opacity: 0.84; }
+  .btn.ghost { background: transparent; color: var(--ink-soft); border-color: var(--hairline); }
+  .btn.ghost:hover { color: var(--ink); border-color: var(--ink); opacity: 1; }
+  .save-state { font-family: var(--mono); font-size: 0.68rem; color: var(--muted); margin-left: auto; }
+
+  /* ── about ──────────────────────────────────────────────────────────── */
+  .about { padding: clamp(3rem, 8vh, 6rem) 0 4rem; }
+  .about-inner { max-width: var(--measure); margin: 0 auto; }
+  .about h2 { font-weight: 300; font-size: clamp(2rem, 5vw, 3rem); letter-spacing: -0.018em; margin: 0 0 1.6rem; }
+  .about p { color: var(--ink-soft); font-size: 1.16rem; line-height: 1.7; margin: 0 0 1.2em; }
+
+  /* ── footer ─────────────────────────────────────────────────────────── */
+  footer {
+    border-top: 1px solid var(--hairline);
+    margin-top: clamp(3rem, 8vh, 6rem);
+    padding: 2.4rem 0 3.2rem;
+  }
+  .foot-inner { display: flex; flex-wrap: wrap; gap: 1.2rem 2rem; align-items: baseline; justify-content: space-between; }
+  .foot-brand { font-family: var(--mono); font-size: 0.74rem; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink); }
+  .foot-links { display: flex; flex-wrap: wrap; gap: 1.4rem; }
+  .foot-links button {
+    background: none; border: 0; cursor: pointer; color: var(--muted);
+    font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; padding: 0;
+  }
+  .foot-links button:hover { color: var(--ink); }
+  .foot-note { width: 100%; color: var(--muted); font-size: 0.8rem; font-family: var(--mono); letter-spacing: 0.03em; }
+
+  /* ── toast ──────────────────────────────────────────────────────────── */
+  .toast {
+    position: fixed; left: 50%; bottom: 1.5rem; transform: translateX(-50%) translateY(2rem);
+    background: var(--ink); color: var(--paper); font-family: var(--mono);
+    font-size: 0.72rem; letter-spacing: 0.08em; padding: 0.7rem 1.1rem; border-radius: 2px;
+    opacity: 0; pointer-events: none; transition: all .35s ease; z-index: 60;
+  }
+  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+  /* ── view transitions ───────────────────────────────────────────────── */
+  .view { animation: rise .5s ease both; }
+  @keyframes rise { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+  @media (max-width: 620px) {
+    .entry-row { grid-template-columns: 1fr; gap: 0.35rem; padding: 1.3rem 0; }
+    .entry-row:hover { padding-left: 0; }
+    .entry-date { padding-top: 0; }
+    .entry-go { display: none; }
+    .nav { gap: 1rem; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { animation: none !important; transition: none !important; }
+  }
+</style>
+
+<header class="bar">
+  <div class="bar-inner">
+    <button class="brand" data-go="home" id="brand"></button>
+    <nav class="nav" aria-label="Sections">
+      <button data-go="home">Index</button>
+      <button data-go="compose">Write</button>
+      <button data-go="about">About</button>
+    </nav>
+  </div>
+</header>
+
+<main id="app"></main>
+
+<footer>
+  <div class="wrap foot-inner">
+    <span class="foot-brand" id="foot-brand"></span>
+    <div class="foot-links">
+      <button data-go="compose">Write an entry</button>
+      <button id="export">Export</button>
+      <button id="import">Import</button>
+    </div>
+    <span class="foot-note" id="foot-note"></span>
+  </div>
+</footer>
+
+<div class="toast" id="toast"></div>
+<input type="file" id="file-input" accept="application/json" hidden />
+
+<script>
+/* ════════════════════════════════════════════════════════════════════════
+   EDIT ME — your publication's identity & opening words
+   ════════════════════════════════════════════════════════════════════════ */
+const SITE = {
+  name: "Marginalia",                          // ← masthead / brand name
+  eyebrow: "A writing journal",                // ← small label above the title
+  // Use <em>…</em> to italicize + accent a phrase in the big headline:
+  headline: "The things worth keeping <em>rarely announce themselves.</em>",
+  // The opening manifesto. Each string is its own paragraph.
+  manifesto: [
+    "This is a slow room. A place to set down the sentence you overheard, the idea you didn't trust yet, the afternoon you'd otherwise forget. No feed, no metrics, no one watching over your shoulder.",
+    "Write as if no one is reading and everyone might. The point isn't to perform a life — it's to keep one."
+  ],
+  about: [
+    "Marginalia is a personal journal — a quiet, unhurried place to write and to reread.",
+    "It belongs to one person and a handful of recurring preoccupations. Entries are kept here for their own sake, the way you keep a stone from a particular beach.",
+    "Replace this text with your own. Tell readers who's writing, and why."
+  ],
+  social: [
+    // { label: "Instagram", url: "https://instagram.com/you" },
+    // { label: "Email", url: "mailto:you@example.com" },
+  ],
+};
+
+/* ── A first entry so the page isn't empty. Delete it whenever. ───────── */
+const SEED = [{
+  id: "welcome",
+  title: "On beginning",
+  date: Date.now(),
+  body:
+    "A blank journal is intimidating in exactly the way a blank afternoon is — too much permission.\n\n" +
+    "So begin small. One true sentence. The weather, if nothing else. The trick of keeping a journal isn't discipline; it's lowering the bar until showing up is almost effortless, then letting the days accumulate into something you didn't plan.\n\n" +
+    "Press *Write* up top to add your first real entry. Press the little ✕ on this one when you're ready to clear it away. Everything you write is saved automatically.",
+}];
+
+/* ════════════════════════════════════════════════════════════════════════
+   Storage — uses Claude's artifact store in preview, localStorage when hosted
+   ════════════════════════════════════════════════════════════════════════ */
+const KEY = "journal:entries";
+const Store = {
+  async load() {
+    try {
+      if (window.storage) {
+        try { const r = await window.storage.get(KEY); return r ? JSON.parse(r.value) : null; }
+        catch { return null; }
+      }
+      const raw = localStorage.getItem(KEY);
+      return raw ? JSON.parse(raw) : null;
+    } catch { return null; }
+  },
+  async save(entries) {
+    const val = JSON.stringify(entries);
+    try {
+      if (window.storage) { await window.storage.set(KEY, val); return; }
+      localStorage.setItem(KEY, val);
+    } catch (e) { console.error("save failed", e); toast("Couldn't save — storage unavailable"); }
+  }
+};
+
+/* ── state ────────────────────────────────────────────────────────────── */
+let entries = [];
+let route = { name: "home", id: null };
+
+/* ── helpers ──────────────────────────────────────────────────────────── */
+const $ = (s, r = document) => r.querySelector(s);
+const app = $("#app");
+
+const fmtDate = (ts) =>
+  new Date(ts).toLocaleDateString(undefined, { year: "numeric", month: "long", day: "numeric" });
+
+const esc = (s) => s.replace(/[&<>"']/g, c =>
+  ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+
+// tiny, safe inline formatting: *italic* and **bold**, paragraphs on blank lines
+function toProse(text) {
+  return esc(text)
+    .split(/\n{2,}/)
+    .map(p => {
+      const inline = p
+        .replace(/\*\*([^*]+)\*\*/g, "<strong>$1</strong>")
+        .replace(/\*([^*]+)\*/g, "<em>$1</em>")
+        .replace(/\n/g, "<br>");
+      return `<p>${inline}</p>`;
+    })
+    .join("");
+}
+
+const excerpt = (text, n = 180) => {
+  const flat = text.replace(/[*#_>]/g, "").replace(/\s+/g, " ").trim();
+  return flat.length > n ? flat.slice(0, n).trimEnd() + "…" : flat;
+};
+
+const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+
+let toastTimer;
+function toast(msg) {
+  const t = $("#toast"); t.textContent = msg; t.classList.add("show");
+  clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove("show"), 2200);
+}
+
+function go(name, id = null) {
+  route = { name, id };
+  window.scrollTo({ top: 0, behavior: "instant" in window ? "instant" : "auto" });
+  render();
+}
+
+/* ── chrome (brand + nav state) ───────────────────────────────────────── */
+function paintChrome() {
+  $("#brand").textContent = SITE.name;
+  $("#foot-brand").textContent = SITE.name;
+  $("#foot-note").textContent = "© " + new Date().getFullYear() + " · Kept by hand.";
+  document.title = SITE.name;
+  document.querySelectorAll(".nav button").forEach(b => {
+    const active = b.dataset.go === route.name ||
+      (route.name === "reader" && b.dataset.go === "home");
+    b.setAttribute("aria-current", active ? "true" : "false");
+  });
+}
+
+/* ════════════════════════════════════════════════════════════════════════
+   Views
+   ════════════════════════════════════════════════════════════════════════ */
+function viewHome() {
+  const sorted = [...entries].sort((a, b) => b.date - a.date);
+  const social = SITE.social.length
+    ? `<div style="margin-top:2.4rem" class="foot-links">${SITE.social
+        .map(s => `<a class="foot-link" href="${esc(s.url)}" target="_blank" rel="noopener" style="font-family:var(--mono);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)">${esc(s.label)}</a>`)
+        .join("")}</div>` : "";
+
+  const list = sorted.length
+    ? sorted.map(e => `
+        <button class="entry-row" data-open="${e.id}">
+          <span class="entry-date">${fmtDate(e.date)}</span>
+          <span class="entry-main">
+            <span class="entry-title">${esc(e.title || "Untitled")}</span>
+            <span class="entry-excerpt">${esc(excerpt(e.body))}</span>
+          </span>
+          <span class="entry-go" aria-hidden="true">→</span>
+        </button>`).join("")
+    : `<div class="empty">
+         <h3>Nothing kept yet.</h3>
+         <p>The first entry is always the hardest. Write a sentence — that's enough.</p>
+         <button class="hero-cta" data-go="compose" style="margin-top:1.4rem">Write the first one <span class="arrow">→</span></button>
+       </div>`;
+
+  return `
+    <section class="hero view">
+      <div class="wrap">
+        <span class="eyebrow">${esc(SITE.eyebrow)}</span>
+        <h1 class="masthead">${SITE.headline}</h1>
+        <div class="manifesto">${SITE.manifesto.map(p => `<p>${esc(p)}</p>`).join("")}</div>
+        <button class="hero-cta" data-go="compose">Start writing <span class="arrow">→</span></button>
+        ${social}
+      </div>
+    </section>
+    <section class="wrap">
+      <div class="contents-head">
+        <span class="eyebrow">Contents</span>
+        <span class="count">${sorted.length} ${sorted.length === 1 ? "entry" : "entries"}</span>
+      </div>
+      <div class="contents">${list}</div>
+    </section>`;
+}
+
+function viewReader(id) {
+  const e = entries.find(x => x.id === id);
+  if (!e) return viewHome();
+  return `
+    <section class="reader view">
+      <div class="wrap"><div class="reader-inner">
+        <button class="back" data-go="home">← Index</button>
+        <div class="reader-date">${fmtDate(e.date)}</div>
+        <h1 class="reader-title">${esc(e.title || "Untitled")}</h1>
+        <div class="prose">${toProse(e.body)}</div>
+        <div class="reader-tools">
+          <button data-edit="${e.id}">Edit</button>
+          <button class="danger" data-del="${e.id}">Delete</button>
+        </div>
+      </div></div>
+    </section>`;
+}
+
+function viewCompose(id) {
+  const e = id ? entries.find(x => x.id === id) : null;
+  return `
+    <section class="compose view">
+      <div class="wrap"><div class="compose-inner">
+        <span class="eyebrow">${e ? "Editing" : "New entry"}</span>
+        <input class="field-title" id="f-title" placeholder="Title" value="${e ? esc(e.title) : ""}" />
+        <textarea class="field-body" id="f-body" placeholder="Begin anywhere. Blank line for a new paragraph. *italic*, **bold**.">${e ? esc(e.body) : ""}</textarea>
+        <div class="compose-bar">
+          <button class="btn" id="save">${e ? "Save changes" : "Keep this"}</button>
+          <button class="btn ghost" data-go="${e ? "reader" : "home"}" ${e ? `data-id="${e.id}"` : ""}>Cancel</button>
+          <span class="save-state" id="save-state"></span>
+        </div>
+      </div></div>
+    </section>`;
+}
+
+function viewAbout() {
+  return `
+    <section class="about view">
+      <div class="wrap"><div class="about-inner">
+        <span class="eyebrow">${esc(SITE.eyebrow)}</span>
+        <h2>${esc(SITE.name)}</h2>
+        ${SITE.about.map(p => `<p>${esc(p)}</p>`).join("")}
+      </div></div>
+    </section>`;
+}
+
+/* ── render + wire events ─────────────────────────────────────────────── */
+function render() {
+  let html;
+  if (route.name === "reader") html = viewReader(route.id);
+  else if (route.name === "compose") html = viewCompose(route.id);
+  else if (route.name === "about") html = viewAbout();
+  else html = viewHome();
+  app.innerHTML = html;
+  paintChrome();
+  wire();
+}
+
+function wire() {
+  app.querySelectorAll("[data-go]").forEach(el =>
+    el.addEventListener("click", () => go(el.dataset.go, el.dataset.id || null)));
+  app.querySelectorAll("[data-open]").forEach(el =>
+    el.addEventListener("click", () => go("reader", el.dataset.open)));
+  app.querySelectorAll("[data-edit]").forEach(el =>
+    el.addEventListener("click", () => go("compose", el.dataset.edit)));
+  app.querySelectorAll("[data-del]").forEach(el =>
+    el.addEventListener("click", () => del(el.dataset.del)));
+
+  const save = $("#save");
+  if (save) {
+    const title = $("#f-title"), body = $("#f-body");
+    const auto = () => { body.style.height = "auto"; body.style.height = Math.max(body.scrollHeight, window.innerHeight * 0.46) + "px"; };
+    auto(); body.addEventListener("input", auto);
+    save.addEventListener("click", () => commit(route.id));
+    // ⌘/Ctrl + Enter to save
+    [title, body].forEach(f => f.addEventListener("keydown", ev => {
+      if ((ev.metaKey || ev.ctrlKey) && ev.key === "Enter") { ev.preventDefault(); commit(route.id); }
+    }));
+    (title.value ? body : title).focus();
+  }
+}
+
+/* ── mutations ────────────────────────────────────────────────────────── */
+async function commit(id) {
+  const title = $("#f-title").value.trim();
+  const body = $("#f-body").value.trim();
+  if (!title && !body) { toast("Write something first"); return; }
+  $("#save-state").textContent = "Saving…";
+
+  if (id) {
+    const e = entries.find(x => x.id === id);
+    e.title = title; e.body = body; e.edited = Date.now();
+  } else {
+    id = uid();
+    entries.push({ id, title, body, date: Date.now() });
+  }
+  await Store.save(entries);
+  toast("Kept");
+  go("reader", id);
+}
+
+async function del(id) {
+  if (!confirm("Delete this entry for good?")) return;
+  entries = entries.filter(x => x.id !== id);
+  await Store.save(entries);
+  toast("Deleted");
+  go("home");
+}
+
+/* ── export / import (backups) ────────────────────────────────────────── */
+$("#export").addEventListener("click", () => {
+  const blob = new Blob([JSON.stringify(entries, null, 2)], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url; a.download = (SITE.name || "journal").toLowerCase().replace(/\s+/g, "-") + "-backup.json";
+  a.click(); URL.revokeObjectURL(url);
+  toast("Backup downloaded");
+});
+$("#import").addEventListener("click", () => $("#file-input").click());
+$("#file-input").addEventListener("change", (ev) => {
+  const file = ev.target.files[0]; if (!file) return;
+  const reader = new FileReader();
+  reader.onload = async () => {
+    try {
+      const data = JSON.parse(reader.result);
+      if (!Array.isArray(data)) throw new Error("bad");
+      const ids = new Set(entries.map(e => e.id));
+      data.forEach(e => { if (!ids.has(e.id)) entries.push(e); });
+      await Store.save(entries); toast("Entries imported"); go("home");
+    } catch { toast("That file didn't look right"); }
+  };
+  reader.readAsText(file);
+});
+
+/* ── boot ─────────────────────────────────────────────────────────────── */
+(async function init() {
+  const loaded = await Store.load();
+  entries = loaded && loaded.length ? loaded : SEED.slice();
+  if (!loaded) await Store.save(entries);
+  render();
+})();
+</script>
