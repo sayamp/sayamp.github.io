@@ -8,6 +8,7 @@
 
 <!-- General Sans (neo-grotesque) via Fontshare, with robust fallbacks -->
 <link rel="preconnect" href="https://api.fontshare.com" crossorigin />
+<script src="theme.js"></script>
 <link href="https://api.fontshare.com/v2/css?f[]=general-sans@300,400,500,600&display=swap" rel="stylesheet" />
 
 <style>
@@ -20,6 +21,7 @@
     --muted: #888888;
     --faint: #f2f2f2;   /* image placeholders */
     --hair: #ececec;    /* the rare hairline */
+    --link: #0056b3;
 
     --maxw: 1180px;
     --reading: 640px;
@@ -31,6 +33,26 @@
     --font: "General Sans", "Inter", -apple-system, BlinkMacSystemFont,
             "Segoe UI", Helvetica, Arial, sans-serif;
   }
+
+  :root[data-theme="dark"] {
+    color-scheme: dark;
+    --bg: #0a0a0a;
+    --ink: #ededed;
+    --muted: #8f8f8f;
+    --faint: #161616;
+    --hair: #222222;
+    --link: #7ab4ff;
+  }
+  /* project SVGs use fixed greys — remap each one for the dark placeholder */
+  [data-theme="dark"] .project__media [fill="#0a0a0a"]   { fill: #f2f2f2; }   /* key marks */
+  [data-theme="dark"] .project__media [stroke="#0a0a0a"] { stroke: #f2f2f2; }
+  [data-theme="dark"] .project__media [fill="#ffffff"]   { fill: var(--faint); } /* hollow nodes */
+  [data-theme="dark"] .project__media [stroke="#bcbcbc"] { stroke: #8a8a8a; }  /* node rings, threshold */
+  [data-theme="dark"] .project__media [stroke="#d2d2d2"] { stroke: #4a4a4a; }  /* edges, baselines */
+  [data-theme="dark"] .project__media [stroke="#e2e2e2"] { stroke: #2a2a2a; }  /* gridlines */
+  [data-theme="dark"] .project__media [fill="#cdcdcd"]   { fill: #6e6e6e; }    /* cleared dots */
+  [data-theme="dark"] .project__media [fill="#dcdcdc"]   { fill: #3a3a3a; }    /* range band */
+  [data-theme="dark"] .project__media [fill="#9a9a9a"]   { fill: #a0a0a0; }    /* labels */
 
   /* ============================================================
      RESET / BASE
@@ -129,7 +151,11 @@
   .nav__brand { font-size: 0.95rem; font-weight: 500; letter-spacing: -0.01em; }
   .nav__links { display: flex; gap: clamp(20px, 4vw, 40px); }
   .nav__links a { font-size: 0.9rem; color: var(--ink); transition: opacity .3s ease; }
-  .nav__links a:hover { opacity: .5; }
+  .nav__links a:hover, .theme-toggle:hover { opacity: .5; }
+  .theme-toggle {
+    border: 0; background: none; padding: 0; cursor: pointer;
+    font: inherit; font-size: 0.9rem; color: var(--ink); transition: opacity .3s ease;
+  }
 
   /* offset so anchored sections clear the fixed nav */
   section[id] { scroll-margin-top: 84px; }
@@ -173,6 +199,7 @@
     margin: 0 0 1.4em;
   }
   .about__body p:last-child { margin-bottom: 0; }
+  .about__body a { color: var(--link); text-decoration: underline; }
 
   /* ============================================================
      SELECTED WORK
@@ -308,7 +335,9 @@
       <a href="#work">work</a>
       <a href="#about">about</a>
       <a href="#education">education</a>
+      <a href="blog/">blog</a>
       <a href="#contact">contact</a>
+      <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Toggle dark mode">dark</button>
     </nav>
   </div>
 </header>
@@ -334,8 +363,8 @@
   <section id="about" class="section wrap" aria-labelledby="about-label">
     <p class="eyebrow reveal" id="about-label">about</p>
     <div class="about__body">
-        <p class="reveal">I graduated from George Washington University with a Master's in Data Science and currently work as a Data Science Research Assistant at the <a href="https://regulatorystudies.columbian.gwu.edu/" target="_blank" rel="noopener noreferrer" style="color: #0056b3; text-decoration: underline;">Regulatory Studies Center</a>.</p>
-        <p class="reveal">In this role, I lead <a href="https://github.com/regulatorystudies/Reg-Stats" target="_blank" rel="noopener noreferrer" style="color: #0056b3; text-decoration: underline;">RegStats</a> and develop data-driven <a href="https://regulatorystudies.columbian.gwu.edu/interactive-dashboards-1" target="_blank" rel="noopener noreferrer" style="color: #0056b3; text-decoration: underline;">dashboards</a> in Python, building on my previous experience as a Software Engineer in Data at Vikas Constructions.</p>
+        <p class="reveal">I graduated from George Washington University with a Master's in Data Science and currently work as a Data Science Research Assistant at the <a href="https://regulatorystudies.columbian.gwu.edu/" target="_blank" rel="noopener noreferrer">Regulatory Studies Center</a>.</p>
+        <p class="reveal">In this role, I lead <a href="https://github.com/regulatorystudies/Reg-Stats" target="_blank" rel="noopener noreferrer">RegStats</a> and develop data-driven <a href="https://regulatorystudies.columbian.gwu.edu/interactive-dashboards-1" target="_blank" rel="noopener noreferrer">dashboards</a> in Python, building on my previous experience as a Software Engineer in Data at Vikas Constructions.</p>
         <p class="reveal">From deep technical execution to explaining the final product to non-technical audiences, I own the process from start to finish.</p>
     </div>
   </section>
@@ -587,6 +616,7 @@
         <li><a class="link" href="#work">work</a></li>
         <li><a class="link" href="#about">about</a></li>
         <li><a class="link" href="#education">education</a></li>
+        <li><a class="link" href="blog/">blog</a></li>
         <li><a class="link" href="#contact">contact</a></li>
       </ul>
     </div>
