@@ -27,8 +27,8 @@
     --reading: 640px;
     --pad-x: clamp(24px, 6vw, 80px);
 
-    /* generous vertical rhythm — adjacent sections breathe at ~180–260px */
-    --section-y: clamp(96px, 15vh, 140px);
+    /* generous vertical rhythm — adjacent sections sit ~96–144px apart */
+    --section-y: clamp(48px, 7vh, 72px);
 
     --font: "General Sans", "Inter", -apple-system, BlinkMacSystemFont,
             "Segoe UI", Helvetica, Arial, sans-serif;
@@ -248,6 +248,7 @@
   .role__title { font-size: 1.125rem; font-weight: 500; letter-spacing: -0.015em; }
   .role__meta { font-size: 0.9rem; color: var(--muted); white-space: nowrap; }
   .role__desc { margin: 12px 0 0; color: var(--muted); max-width: 70ch; font-size: 1rem; line-height: 1.6; }
+  .cite strong { color: var(--ink); font-weight: 500; }
 
   /* ============================================================
      EDUCATION
@@ -270,43 +271,6 @@
   .skill__items { font-size: 1.0625rem; letter-spacing: -0.01em; line-height: 1.55; }
 
   /* ============================================================
-     FOOTER
-     ============================================================ */
-  .footer { padding-top: var(--section-y); padding-bottom: 48px; border-top: 1px solid var(--hair); }
-  .footer__grid {
-    display: grid;
-    grid-template-columns: 1.4fr 1fr 1fr 1.4fr;
-    gap: clamp(40px, 5vw, 64px);
-  }
-  .footer__brand { font-size: 1rem; font-weight: 500; }
-  .footer__signoff { margin: 14px 0 0; color: var(--muted); font-size: 0.95rem; max-width: 26ch; line-height: 1.5; }
-  .footer__col h4 {
-    margin: 0 0 18px; font-size: 0.75rem; font-weight: 500;
-    letter-spacing: 0.08em; color: var(--muted);
-  }
-  .footer__col ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
-  .footer__col a { font-size: 0.95rem; }
-
-  .subscribe { display: flex; align-items: center; gap: 12px; border-bottom: 1px solid var(--ink); padding-bottom: 8px; max-width: 320px; }
-  .subscribe input {
-    flex: 1; border: 0; background: transparent; font: inherit; font-size: 0.95rem;
-    color: var(--ink); padding: 2px 0;
-  }
-  .subscribe input::placeholder { color: var(--muted); }
-  .subscribe button {
-    border: 0; background: transparent; font: inherit; font-size: 0.95rem;
-    color: var(--ink); cursor: pointer; padding: 0; transition: opacity .3s ease;
-  }
-  .subscribe button:hover { opacity: .5; }
-  .footnote { margin: 14px 0 0; color: var(--muted); font-size: 0.78rem; line-height: 1.5; max-width: 30ch; }
-
-  .footer__bottom {
-    margin-top: clamp(56px, 8vh, 88px);
-    font-size: 0.8rem;
-    color: var(--muted);
-  }
-
-  /* ============================================================
      RESPONSIVE
      ============================================================ */
   @media (max-width: 720px) {
@@ -314,11 +278,7 @@
     .nav__links { gap: 18px; }
     .nav__links a { font-size: 0.85rem; }
     .skill__group { grid-template-columns: 1fr; gap: 4px; }
-    .footer__grid { grid-template-columns: 1fr; gap: 44px; }
     .project__media { aspect-ratio: 4 / 3; }
-  }
-  @media (min-width: 721px) and (max-width: 1000px) {
-    .footer__grid { grid-template-columns: 1fr 1fr; row-gap: 48px; }
   }
 </style>
 </head>
@@ -334,9 +294,8 @@
     <nav class="nav__links" aria-label="Primary">
       <a href="#work">work</a>
       <a href="#about">about</a>
+      <a href="#research">research</a>
       <a href="#education">education</a>
-      <a href="blog/">blog</a>
-      <a href="#contact">contact</a>
       <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Toggle dark mode">dark</button>
     </nav>
   </div>
@@ -518,6 +477,34 @@
   </section>
 
   <!-- ============================================================
+       RESEARCH
+       ============================================================ -->
+  <section id="research" class="section wrap" aria-labelledby="research-label">
+    <p class="eyebrow reveal" id="research-label">research</p>
+
+    <div class="roles">
+
+      <!-- One <article> per item, newest first. Citation in APA style; your name in <strong>. -->
+      <article class="role reveal">
+        <div class="role__head">
+          <h3 class="role__title"><a class="link" href="https://arxiv.org/abs/2610.12396" target="_blank" rel="noopener">Mixup Barcodes for Topology-Aware Financial Decision Making ↗</a></h3>
+          <span class="role__meta">October 2026</span>
+        </div>
+        <p class="role__desc cite">Sharma, B. N., Opitz, J., Moser, A., <strong>Palrecha, S.</strong>, Majhi, S., &amp; Mitra, A. (2026). Mixup barcodes for topology-aware financial decision making. <em>arXiv preprint</em> arXiv:2610.12396 [stat.AP].</p>
+      </article>
+
+      <article class="role reveal">
+        <div class="role__head">
+          <h3 class="role__title"><a class="link" href="https://regulatorystudies.columbian.gwu.edu/reviewing-second-trump-administrations-first-year-regstats" target="_blank" rel="noopener">Reviewing the Second Trump Administration’s First Year with RegStats ↗</a></h3>
+          <span class="role__meta">March 2026</span>
+        </div>
+        <p class="role__desc cite"><strong>Palrecha, S.</strong> (2026, March 4). Reviewing the second Trump administration’s first year with RegStats. <em>GW Regulatory Studies Center</em>.</p>
+      </article>
+
+    </div>
+  </section>
+
+  <!-- ============================================================
        EXPERIENCE
        ============================================================ -->
   <section id="experience" class="section wrap" aria-labelledby="exp-label">
@@ -599,51 +586,6 @@
 
 </main>
 
-<!-- ============================================================
-     FOOTER
-     ============================================================ -->
-<footer id="contact" class="footer wrap">
-  <div class="footer__grid">
-
-    <div class="footer__col">
-      <p class="footer__brand">sayam palrecha</p>
-      <p class="footer__signoff">building intelligence that ships, and stays accountable.</p>
-    </div>
-
-    <div class="footer__col">
-      <h4>navigate</h4>
-      <ul>
-        <li><a class="link" href="#work">work</a></li>
-        <li><a class="link" href="#about">about</a></li>
-        <li><a class="link" href="#education">education</a></li>
-        <li><a class="link" href="blog/">blog</a></li>
-        <li><a class="link" href="#contact">contact</a></li>
-      </ul>
-    </div>
-
-    <div class="footer__col">
-      <h4>elsewhere</h4>
-      <ul>
-        <li><a class="link" href="mailto:sayampalrecha2@gmail.com">email</a></li>
-        <li><a class="link" href="https://sayamp.github.io/" target="_blank" rel="noopener">github</a></li>
-        <li><a class="link" href="https://www.linkedin.com/in/sayampalrecha/" target="_blank" rel="noopener">linkedin</a></li>
-      </ul>
-    </div>
-
-    <div class="footer__col">
-      <h4>say hello</h4>
-      <form class="subscribe" id="hello-form">
-        <input type="email" name="email" placeholder="your email" aria-label="Your email" required />
-        <button type="submit">say hello</button>
-      </form>
-      <p class="footnote" id="hello-note">drop a line — i read everything that lands here.</p>
-    </div>
-
-  </div>
-
-  <p class="footer__bottom">© 2026 Sayam Palrecha</p>
-</footer>
-
 <script>
   /* ----------------------------------------------------------
      Scroll reveal — IntersectionObserver, gentle stagger
@@ -675,22 +617,6 @@
     nodes.forEach(function (n) { io.observe(n); });
   })();
 
-  /* ----------------------------------------------------------
-     "Say hello" — graceful inline confirmation (no backend)
-     ---------------------------------------------------------- */
-  (function () {
-    var form = document.getElementById("hello-form");
-    var note = document.getElementById("hello-note");
-    if (!form) return;
-    form.addEventListener("submit", function (e) {
-      e.preventDefault();
-      var input = form.querySelector("input");
-      if (input && input.value) {
-        note.textContent = "thanks — i'll be in touch.";
-        form.reset();
-      }
-    });
-  })();
 </script>
 
 </body>
